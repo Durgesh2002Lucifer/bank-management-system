@@ -1,0 +1,34 @@
+[
+    {
+        "Name": "durgesh",
+        "Age": 23,
+        "Pin": 2345,
+        "Email": "durgesh2020shukla@gmail.com",
+        "Account_No.": "1234",
+        "Balance": 5000
+    },
+    {
+        "Name": "Avi Jain",
+        "Age": 22,
+        "Pin": 1245,
+        "Email": "avi778@gmail.com",
+        "Account_No.": "i1ux4#4",
+        "Balance": 27345
+    },
+    {
+        "Name": "rahul",
+        "Age": 24,
+        "Pin": 4567,
+        "Email": "rahul77779@gmail.com",
+        "Account_No.": "ZTr$991",
+        "Balance": 0
+    },
+    {
+        "Name": "Krishna Shukla",
+        "Age": 21,
+        "Pin": 2347,
+        "Email": "krishna@gmail.com",
+        "Account_No.": "Hre%010",
+        "Balance": 0
+    }
+]
