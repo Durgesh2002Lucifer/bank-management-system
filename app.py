@@ -1,69 +1,77 @@
 import streamlit as st
 from bank import Bank
 
-st.write("App Loaded Successfully")
+st.set_page_config(page_title="Simple Bank App", layout="centered")
+st.title("🏦 Welcome to Streamlit Bank")
 
-bank = Bank()
-
-st.title("🏦 Bank Management System")
-
-menu = st.sidebar.selectbox(
-    "Choose Option",
-    ["Create Account", "Login & Manage"]
-)
+menu = st.sidebar.selectbox("Choose Action", ["Create Account", "Deposit", "Withdraw", "Show Details", "Update Info", "Delete Account"])
 
 if menu == "Create Account":
-    st.header("Create Account")
-
-    name = st.text_input("Name")
-    age = st.number_input("Age", min_value=1, step=1)
-    pin = st.text_input("4 Digit PIN", type="password")
-    email = st.text_input("Email")
-
+    st.subheader("Create New Account")
+    name = st.text_input("Your Name")
+    age = st.number_input("Your Age", min_value=0, step=1)
+    email = st.text_input("Your Email")
+    pin = st.text_input("4-digit PIN", type="password")
+    
     if st.button("Create"):
-        result = bank.create_account(name, age, int(pin), email)
-        if isinstance(result, dict):
-            st.success("Account Created Successfully!")
-            st.write("Your Account Number:", result["Account_No."])
+        if name and email and pin:
+            user, msg = Bank.create_account(name, int(age), email, int(pin))
+            st.success(msg)
+            if user:
+                st.info(f"Your Account Number: {user['accountNo.']}")
         else:
-            st.error(result)
+            st.warning("Fill all fields")
 
-elif menu == "Login & Manage":
-    st.header("Login")
+elif menu == "Deposit":
+    st.subheader("Deposit Money")
+    acc_no = st.text_input("Account Number")
+    pin = st.text_input("PIN", type="password")
+    amount = st.number_input("Amount", min_value=1)
+    
+    if st.button("Deposit"):
+        success, msg = Bank.deposit(acc_no, int(pin), int(amount))
+        st.success(msg) if success else st.error(msg)
 
+elif menu == "Withdraw":
+    st.subheader("Withdraw Money")
+    acc_no = st.text_input("Account Number")
+    pin = st.text_input("PIN", type="password")
+    amount = st.number_input("Amount", min_value=1)
+    
+    if st.button("Withdraw"):
+        success, msg = Bank.withdraw(acc_no, int(pin), int(amount))
+        st.success(msg) if success else st.error(msg)
+
+elif menu == "Show Details":
+    st.subheader("Account Details")
     acc_no = st.text_input("Account Number")
     pin = st.text_input("PIN", type="password")
 
-    if st.button("Login"):
-        user = bank.authenticate(acc_no, int(pin))
+    if st.button("Show"):
+        user = Bank.find_user(acc_no, int(pin))
         if user:
-            st.success("Login Successful!")
-
-            action = st.selectbox("Choose Action", ["Deposit", "Withdraw", "View Details", "Delete Account"])
-
-            if action == "Deposit":
-                amount = st.number_input("Amount", min_value=1)
-                if st.button("Deposit"):
-                    if bank.deposit(user, amount):
-                        st.success("Money Deposited!")
-                    else:
-                        st.error("Invalid Amount")
-
-            elif action == "Withdraw":
-                amount = st.number_input("Amount", min_value=1)
-                if st.button("Withdraw"):
-                    if bank.withdraw(user, amount):
-                        st.success("Money Withdrawn!")
-                    else:
-                        st.error("Insufficient Balance")
-
-            elif action == "View Details":
-                st.write(user)
-
-            elif action == "Delete Account":
-                if st.button("Confirm Delete"):
-                    bank.delete_account(user)
-                    st.success("Account Deleted")
-
+            st.json(user)
         else:
-            st.error("Invalid Credentials")
+            st.error("No account found")
+
+elif menu == "Update Info":
+    st.subheader("Update Your Info")
+    acc_no = st.text_input("Account Number")
+    pin = st.text_input("Current PIN", type="password")
+    
+    name = st.text_input("New Name (Optional)")
+    email = st.text_input("New Email (Optional)")
+    new_pin = st.text_input("New PIN (Optional)")
+
+    if st.button("Update"):
+        success, msg = Bank.update_user(acc_no, int(pin), name, email, new_pin)
+        st.success(msg) if success else st.error(msg)
+
+elif menu == "Delete Account":
+    st.subheader("Delete Account")
+    acc_no = st.text_input("Account Number")
+    pin = st.text_input("PIN", type="password")
+
+    if st.button("Delete"):
+        success, msg = Bank.delete_user(acc_no, int(pin))
+        st.success(msg) if success else st.error(msg)
