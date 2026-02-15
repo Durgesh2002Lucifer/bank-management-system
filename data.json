@@ -5,7 +5,7 @@
         "Pin": 2345,
         "Email": "durgesh2020shukla@gmail.com",
         "Account_No.": "1234",
-        "Balance": 5000
+        "Balance": 6000
     },
     {
         "Name": "Avi Jain",
@@ -29,6 +29,14 @@
         "Pin": 2347,
         "Email": "krishna@gmail.com",
         "Account_No.": "Hre%010",
+        "Balance": 0
+    },
+    {
+        "Name": "raj narayan",
+        "Age": 20,
+        "Pin": 2314,
+        "Email": "rajnarayan@gmail.com",
+        "Account_No.": "0AZ3@H3",
         "Balance": 0
     }
 ]

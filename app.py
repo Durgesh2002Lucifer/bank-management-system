@@ -15,12 +15,23 @@ if menu == "Create Account":
     
     if st.button("Create"):
         if name and email and pin:
-            user, msg = Bank.create_account(name, int(age), email, int(pin))
-            st.success(msg)
-            if user:
-                st.info(f"Your Account Number: {user['accountNo.']}")
+            bank = Bank()   # create object
+
+            user = bank.create_account(
+                name,
+                int(age),
+                int(pin),
+                email
+            )
+
+            if isinstance(user, dict):
+                st.success("Account created successfully")
+                st.info(f"Your Account Number: {user['Account_No.']}")
+            else:
+                st.error(user)   # if error message returned
         else:
             st.warning("Fill all fields")
+
 
 elif menu == "Deposit":
     st.subheader("Deposit Money")
@@ -29,18 +40,38 @@ elif menu == "Deposit":
     amount = st.number_input("Amount", min_value=1)
     
     if st.button("Deposit"):
-        success, msg = Bank.deposit(acc_no, int(pin), int(amount))
-        st.success(msg) if success else st.error(msg)
+        bank = Bank()
+        user = bank.authenticate(acc_no, int(pin))
+
+        if user:
+            success = bank.deposit(user, int(amount))
+            if success:
+                st.success("Amount deposited successfully")
+            else:
+                st.error("Invalid amount (Max 10000 allowed)")
+        else:
+            st.error("Invalid Account Number or PIN")
+
 
 elif menu == "Withdraw":
     st.subheader("Withdraw Money")
     acc_no = st.text_input("Account Number")
     pin = st.text_input("PIN", type="password")
     amount = st.number_input("Amount", min_value=1)
-    
+
     if st.button("Withdraw"):
-        success, msg = Bank.withdraw(acc_no, int(pin), int(amount))
-        st.success(msg) if success else st.error(msg)
+        bank = Bank()
+        user = bank.authenticate(acc_no, int(pin))
+
+        if user:
+            success = bank.withdraw(user, int(amount))
+            if success:
+                st.success("Withdrawal successful")
+            else:
+                st.error("Insufficient balance")
+        else:
+            st.error("Invalid Account Number or PIN")
+
 
 elif menu == "Show Details":
     st.subheader("Account Details")
@@ -48,24 +79,34 @@ elif menu == "Show Details":
     pin = st.text_input("PIN", type="password")
 
     if st.button("Show"):
-        user = Bank.find_user(acc_no, int(pin))
+        bank = Bank()
+        user = bank.authenticate(acc_no, int(pin))
+
         if user:
             st.json(user)
         else:
-            st.error("No account found")
+            st.error("Invalid Account Number or PIN")
+
 
 elif menu == "Update Info":
     st.subheader("Update Your Info")
     acc_no = st.text_input("Account Number")
     pin = st.text_input("Current PIN", type="password")
-    
+
     name = st.text_input("New Name (Optional)")
     email = st.text_input("New Email (Optional)")
     new_pin = st.text_input("New PIN (Optional)")
 
     if st.button("Update"):
-        success, msg = Bank.update_user(acc_no, int(pin), name, email, new_pin)
-        st.success(msg) if success else st.error(msg)
+        bank = Bank()
+        user = bank.authenticate(acc_no, int(pin))
+
+        if user:
+            bank.update_user(user, name, email, new_pin)
+            st.success("Account updated successfully")
+        else:
+            st.error("Invalid Account Number or PIN")
+
 
 elif menu == "Delete Account":
     st.subheader("Delete Account")
@@ -73,5 +114,11 @@ elif menu == "Delete Account":
     pin = st.text_input("PIN", type="password")
 
     if st.button("Delete"):
-        success, msg = Bank.delete_user(acc_no, int(pin))
-        st.success(msg) if success else st.error(msg)
+        bank = Bank()
+        user = bank.authenticate(acc_no, int(pin))
+
+        if user:
+            bank.delete_account(user)
+            st.success("Account deleted successfully")
+        else:
+            st.error("Invalid Account Number or PIN")
