@@ -13,7 +13,7 @@
         "Pin": 1245,
         "Email": "avi778@gmail.com",
         "Account_No.": "i1ux4#4",
-        "Balance": 27345
+        "Balance": 26345
     },
     {
         "Name": "rahul",
@@ -37,6 +37,14 @@
         "Pin": 2314,
         "Email": "rajnarayan@gmail.com",
         "Account_No.": "0AZ3@H3",
+        "Balance": 0
+    },
+    {
+        "Name": "Anjali Singh",
+        "Age": 22,
+        "Pin": 5678,
+        "Email": "anjalikumari@gmail.com",
+        "Account_No.": "GG&I284",
         "Balance": 0
     }
 ]
